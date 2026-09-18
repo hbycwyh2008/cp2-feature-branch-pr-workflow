@@ -1,0 +1,125 @@
+name: CP2 Assessment Self-Test
+
+on:
+  push:
+    branches: [main, build-cp2-assessment]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  structural-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate CP2 assessment structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f README.md
+          test -f feature.txt
+          test -f submission.md
+          test -f TEACHER-GRADING.md
+          test -f .github/pull_request_template.md
+          test -f .github/ISSUE_TEMPLATE/cp2-submission.yml
+          test -f .github/workflows/0-start-exercise.yml
+          grep -q 'branches: \[main\]' .github/workflows/0-start-exercise.yml
+          grep -q "github.repository != 'KLIS-CS/GitHub-Feature-Branch-Pull-Request-Workflow'" .github/workflows/0-start-exercise.yml
+          ! grep -q '### Student checklist' .github/workflows/0-start-exercise.yml
+          grep -q 'You do not need to check boxes manually' .github/workflows/0-start-exercise.yml
+          grep -q 'Exercise Issue automatically' README.md
+          grep -q 'do \*\*not\*\* need to open \*\*Actions\*\*' README.md
+          test -f .github/workflows/grade.yml
+          test -f .github/workflows/grade-external-submission.yml
+          test -f .github/workflows/student-score.yml
+
+          grep -q 'COPY%20EXERCISE' README.md
+          grep -q 'visibility=public' README.md
+          grep -q 'cp2-YOUR-GITHUB-USERNAME' README.md
+          grep -q 'exact pattern' README.md
+          grep -q "PR's head branch, not from \`main\`" README.md
+          grep -q 'Automatic total.*60' README.md
+          grep -q 'Submit CP2' README.md
+          grep -q 'single student-facing status page' README.md
+          grep -q '^STARTER: Replace this line on your CP2 feature branch' feature.txt
+          grep -q 'Question 1 — Branch Safety' submission.md
+          grep -q 'Question 2 — Stage vs Commit' submission.md
+          grep -q 'Question 3 — Commit vs Push vs Pull Request' submission.md
+          grep -q "head/source branch" submission.md
+          grep -q '/manual-grade' TEACHER-GRADING.md
+          grep -q 'Branch safety: 0/10' TEACHER-GRADING.md
+          grep -q "branches: \['cp2-\*'\]" .github/workflows/grade.yml
+          grep -q 'pull-requests: read' .github/workflows/grade.yml
+          grep -q 'Correct checkpoint branch name' .github/workflows/grade.yml
+          grep -q 'expectedBranch' .github/workflows/grade.yml
+          grep -q 'branchNameCorrect' .github/workflows/grade.yml
+          grep -q "read('submission.md', branch)" .github/workflows/grade.yml
+          grep -q 'submissionMetadataCorrect' .github/workflows/grade.yml
+          ! grep -q "field('Pull Request Number')" .github/workflows/grade.yml
+          grep -q 'Submission complete on feature branch' .github/workflows/grade.yml
+          grep -q 'main remained untouched' .github/workflows/grade.yml
+          grep -q 'PR changes only allowed files' .github/workflows/grade.yml
+          grep -q 'klis-cp2-mother-score' .github/workflows/grade-external-submission.yml
+          grep -q 'expectedBranch' .github/workflows/grade-external-submission.yml
+          grep -q 'submission.md' .github/workflows/grade-external-submission.yml
+          grep -q "\['clone', '--quiet', '--no-checkout'" .github/workflows/grade-external-submission.yml
+          grep -q 'rev-list' .github/workflows/grade-external-submission.yml
+          grep -q 'ls-remote' .github/workflows/grade-external-submission.yml
+          grep -q 'submission.md' .github/workflows/grade-external-submission.yml
+          grep -q 'Automatic checklist' .github/workflows/grade-external-submission.yml
+          grep -q 'Checked = passed. Unchecked = action required.' .github/workflows/grade-external-submission.yml
+          grep -q 'checkpoint branch' .github/workflows/grade-external-submission.yml
+          grep -q 'A merge to' .github/workflows/grade-external-submission.yml
+          grep -q 'Grade CP2 directly' .github/workflows/grade-external-submission.yml || true
+          grep -q '.cp2-grades/' .github/workflows/grade-external-submission.yml
+          grep -q 'klis-cp2-exercise' .github/workflows/student-score.yml
+          grep -q 'klis-cp2-progress' .github/workflows/student-score.yml
+          grep -q 'klis-cp2-teacher-sync-start' .github/workflows/student-score.yml
+          grep -q 'updateComment' .github/workflows/student-score.yml
+          ! grep -q "title: 'CP2 — Score'" .github/workflows/student-score.yml
+          ! grep -q "title: 'Checkpoint 2 — Progress'" .github/workflows/grade.yml
+          ! grep -q 'Pull Request Number:' submission.md
+          grep -q 'raw.githubusercontent.com/KLIS-CS/GitHub-Feature-Branch-Pull-Request-Workflow/grades' .github/workflows/student-score.yml
+
+      - name: Validate workflow YAML syntax
+        shell: bash
+        run: |
+          ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts "OK #{f}" }' \
+            .github/workflows/0-start-exercise.yml \
+            .github/workflows/grade.yml \
+            .github/workflows/grade-external-submission.yml \
+            .github/workflows/student-score.yml \
+            .github/workflows/template-self-test.yml
+
+      - name: Validate scoring contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          readme = Path('README.md').read_text()
+          grader = Path('.github/workflows/grade.yml').read_text()
+          teacher = Path('TEACHER-GRADING.md').read_text()
+
+          required = [
+              'Correct checkpoint branch name',
+              'main remained untouched',
+              'feature.txt changed on CP2 branch',
+              'Branch has commit(s) ahead of main',
+              'Open Pull Request targets main',
+              'PR changes only allowed files',
+              'Submission complete on feature branch',
+          ]
+          for item in required:
+              assert item in grader, item
+
+          assert 'Automatic total' in readme and '**60**' in readme
+          assert 'Branch safety: 0/10' in teacher
+          assert 'Git workflow explanation: 0/10' in teacher
+          assert 'Pull Request understanding: 0/10' in teacher
+          assert 'Reflection & work quality: 0/10' in teacher
+          print('CP2 scoring contract OK')
+          PY

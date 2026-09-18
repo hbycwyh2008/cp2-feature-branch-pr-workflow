@@ -1,0 +1,61 @@
+name: Start Exercise
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  start:
+    if: ${{ github.repository != 'KLIS-CS/GitHub-Feature-Branch-Pull-Request-Workflow' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create checkpoint issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const marker = '<!-- klis-cp2-exercise -->';
+            const username = context.actor;
+            const branch = `cp2-${username}`;
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, state: 'all', per_page: 100
+            });
+            const existing = issues.find(i => !i.pull_request && i.body?.includes(marker));
+            if (existing) {
+              core.info(`Exercise issue already exists: #${existing.number}`);
+              return;
+            }
+
+            const body = `${marker}
+            ## Checkpoint 2 — Feature Branch & Pull Request Workflow
+
+            Welcome @${username}.
+
+            **Required branch:** \`${branch}\`
+
+            ### Your task
+
+            1. Clone this repository to your computer.
+            2. Create and switch to \`${branch}\`. Do not do the checkpoint work on \`main\`.
+            3. On that branch, update \`feature.txt\` and complete \`submission.md\`.
+            4. Commit and push \`${branch}\` to GitHub.
+            5. Open a Pull Request from \`${branch}\` → \`main\` and leave it open for grading.
+
+            GitHub detects the Pull Request automatically. You do **not** need to enter a PR number in \`submission.md\`.
+
+            ### Automatic grading
+
+            The grader updates the checklist and score **below in this same Issue** whenever you push or update the Pull Request. You do not need to check boxes manually.
+            `;
+
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title: 'Exercise: Checkpoint 2 — Feature Branch & Pull Request Workflow',
+              body
+            });
