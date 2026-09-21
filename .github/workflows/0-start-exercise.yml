@@ -26,10 +26,6 @@ jobs:
               owner, repo, state: 'all', per_page: 100
             });
             const existing = issues.find(i => !i.pull_request && i.body?.includes(marker));
-            if (existing) {
-              core.info(`Exercise issue already exists: #${existing.number}`);
-              return;
-            }
 
             const body = `${marker}
             ## Checkpoint 2 — Feature Branch & Pull Request Workflow
