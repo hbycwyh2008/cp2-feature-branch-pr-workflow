@@ -8,7 +8,7 @@ Describe the change you made in `feature.txt`.
 
 Write 1–2 sentences.
 
-### Before requesting review
+### Before submitting this Pull Request
 
 - [ ] My head/source branch is exactly `cp2-MY-GITHUB-USERNAME`.
 - [ ] This Pull Request targets `main`.
@@ -17,8 +17,3 @@ Write 1–2 sentences.
 - [ ] I pushed the CP2 branch to GitHub.
 - [ ] I completed `submission.md` on this branch.
 - [ ] This PR changes only `feature.txt` and `submission.md`.
-
-### Review
-
-- [ ] I will request review from another GitHub user.
-- [ ] I will receive an **APPROVED** review from another GitHub user.
