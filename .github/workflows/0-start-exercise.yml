@@ -45,19 +45,50 @@ jobs:
             - [ ] Update only \`feature.txt\` and \`submission.md\`.
             - [ ] Commit and push \`${branch}\`.
             - [ ] Open a Pull Request from \`${branch}\` → \`main\`.
-            - [ ] Request review from another GitHub user.
-            - [ ] Receive an **APPROVED** review.
 
             GitHub detects the Pull Request automatically. You do **not** enter a PR number manually.
 
             ### Automatic grading
 
-            The grader updates the checklist and score **below in this same Issue** whenever you push the feature branch, open or update the Pull Request, or receive a review.
+            The grader updates the checklist and score **below in this same Issue** whenever you push the feature branch or open/update the Pull Request.
             `;
 
-            await github.rest.issues.create({
-              owner,
-              repo,
-              title: 'Exercise: Checkpoint 2 — Feature Branch & Pull Request Workflow',
-              body
+            let exercise = existing;
+            if (!exercise) {
+              exercise = (await github.rest.issues.create({
+                owner,
+                repo,
+                title: 'Exercise: Checkpoint 2 — Feature Branch & Pull Request Workflow',
+                body
+              })).data;
+            }
+
+            const progressMarker = '<!-- klis-cp2-progress -->';
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: exercise.number, per_page: 100
             });
+            const progressExists = comments.some(c => c.body?.includes(progressMarker));
+            if (!progressExists) {
+              const progressBody = [
+                progressMarker,
+                '## CP2 — Progress & Score',
+                '',
+                `**Student:** @${username}  `,
+                `**Repository:** https://github.com/${owner}/${repo}  `,
+                '**Automatic score:** 0/60',
+                '',
+                '| Check | Score | Evidence |',
+                '|---|---:|---|',
+                `| ⬜ Correct checkpoint branch identity | 0/10 | Create ${branch}. |`,
+                '| ⬜ feature.txt changed on feature branch | 0/10 | Replace the starter line. |',
+                '| ⬜ Commit evidence on feature branch | 0/10 | Commit the CP2 work. |',
+                '| ⬜ Pull Request targets main | 0/15 | Open the required Pull Request. |',
+                '| ⬜ PR changes only allowed files | 0/5 | Waiting for Pull Request. |',
+                '| ⬜ Submission complete on PR head | 0/10 | Complete submission.md on the CP2 branch. |',
+                '',
+                '🟡 **IN PROGRESS — complete the missing automatic evidence.**'
+              ].join('\n');
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: exercise.number, body: progressBody
+              });
+            }
