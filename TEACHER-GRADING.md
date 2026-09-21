@@ -2,7 +2,7 @@
 
 Checkpoint 2 uses a **60 automatic + 40 teacher = 100 total** model.
 
-The automatic grader checks the feature-branch/PR lifecycle through a human **APPROVED** review. The teacher grades the reasoning in `submission.md` and the quality of the completed Pull Request workflow.
+The automatic grader checks the feature-branch and Pull Request workflow. The teacher grades the reasoning in `submission.md` and the quality of the completed Pull Request workflow.
 
 ## Teacher rubric — 40 points
 
@@ -10,7 +10,7 @@ The automatic grader checks the feature-branch/PR lifecycle through a human **AP
 |---|---:|---|
 | Branch safety | 10 | Student understands why feature work belongs on a feature branch rather than directly on `main`. |
 | Git workflow explanation | 10 | Student accurately explains staging, committing, and pushing. |
-| Pull Request understanding | 10 | Student distinguishes pushing a branch, opening a Pull Request, requesting review, and receiving approval. |
+| Pull Request understanding | 10 | Student distinguishes pushing a feature branch from opening a Pull Request into `main`. |
 | Reflection & work quality | 10 | Reflection is specific; commit/PR work is intentional and clear. |
 
 ## Fixed grading comment
@@ -36,4 +36,4 @@ The newest valid grading comment by `hbycwyh2008` is used. A short-form override
 
 ## Recommended teacher check
 
-Open the student's Pull Request and confirm that the student can explain why pushing a feature branch is different from opening a Pull Request, and what review/approval contributes before the work is considered complete for CP2.
+Open the student's Pull Request and confirm that the student can explain why pushing a feature branch is different from opening a Pull Request into `main`.
