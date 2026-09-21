@@ -5,8 +5,8 @@
 > GitHub detects the Pull Request number automatically.
 
 Name:  
-GitHub Username:  
-Required Branch:  
+GitHub Username:  hbycwyh2008   
+Required Branch:  cp2-hbycwyh2008
 
 ## Commands Used
 
@@ -26,22 +26,22 @@ git push -u origin cp2-YOUR-GITHUB-USERNAME
 
 Why should you avoid implementing this checkpoint directly on `main`?
 
-Answer:
+Answer:fsdfsd
 
 ## Question 2 — Stage vs Commit
 
 What is the difference between `git add` and `git commit`?
 
-Answer:
+Answer:sdfs
 
 ## Question 3 — Push, Pull Request, Review
 
 Explain what changes when you push a branch, open a Pull Request, and receive a review.
 
-Answer:
+Answer:sdfs
 
 ## Reflection
 
 Which checkpoint in the branch → PR → review workflow is most useful for preventing mistakes, and why?
 
-Answer:
+Answer:sfdsd
