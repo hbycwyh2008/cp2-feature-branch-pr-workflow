@@ -73,13 +73,33 @@ jobs:
                 ? `> ${feedback.replace(/\n/g, '\n> ')}`
                 : '> Teacher grade published. No written feedback was included.';
 
+            const teacherTemplate = teacher === null
+              ? `
+            #### Teacher grading template
+
+            Use this in the mother-repository CP2 submission Issue:
+
+            \\`\\`\\`text
+            /manual-grade
+            Branch safety: 0/10
+            Git workflow explanation: 0/10
+            Pull Request understanding: 0/10
+            Reflection & work quality: 0/10
+
+            Feedback:
+            Write concise feedback here.
+            \\`\\`\\`
+            `
+              : '';
+
             const teacherBlock = `${teacherStart}
-            ### 🧑‍🏫 Teacher review
+            ### 🧑‍🏫 Teacher review — 40 points
 
             **Teacher score:** ${teacher === null ? 'awaiting review' : `${teacher}/40${grader ? ` by @${grader}` : ''}`}  
             **Final score:** ${teacher === null ? 'pending teacher review' : `${total}/100`}
 
             ${teacher === null ? '🔵 **Awaiting teacher review.**' : `✅ **FINAL SCORE: ${total}/100**`}
+            ${teacherTemplate}
 
             #### Teacher feedback
             ${feedbackBlock}
