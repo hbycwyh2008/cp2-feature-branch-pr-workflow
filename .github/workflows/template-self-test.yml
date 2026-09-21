@@ -31,7 +31,7 @@ jobs:
           grep -q '^STARTER: Replace this line on your CP2 feature branch' feature.txt
 
           grep -q 'stored \*\*head commit\*\*' submission.md
-          grep -q 'Push, Pull Request, Review' submission.md
+          grep -q 'Push vs Pull Request' submission.md
           ! grep -qi 'merge' submission.md
           ! grep -q 'Pull Request Number:' submission.md
 
