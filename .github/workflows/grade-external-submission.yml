@@ -222,32 +222,20 @@ jobs:
                   commandBlock.length >= 10 &&
                   ['Question 1', 'Question 2', 'Question 3', 'Reflection'].every(h => Boolean(answer(h)));
 
-                const reviews = pr ? (await publicJson(`${api}/pulls/${pr.number}/reviews?per_page=100`) || []) : [];
-                const approvedReview = reviews
-                  .filter(r =>
-                    r.state === 'APPROVED' &&
-                    r.user?.type === 'User' &&
-                    r.user?.login?.toLowerCase() !== student.toLowerCase() &&
-                    r.submitted_at
-                  )
-                  .sort((a,b) => new Date(a.submitted_at) - new Date(b.submitted_at))[0] || null;
-
                 const correctBranch = Boolean(pr?.head?.ref === expectedBranch) || branchExists;
                 const checks = [
                   ['Correct checkpoint branch identity', correctBranch ? 10 : 0, 10,
                     correctBranch ? expectedBranch : `expected ${expectedBranch}`],
                   ['feature.txt changed on PR head', featureChanged ? 10 : 0, 10,
                     featureChanged ? 'feature change detected' : 'replace the starter line on the CP2 branch'],
-                  ['Commit evidence on feature branch', commitCount >= 1 ? 5 : 0, 5,
+                  ['Commit evidence on feature branch', commitCount >= 1 ? 10 : 0, 10,
                     commitCount >= 1 ? `${commitCount} commit(s)` : 'commit the CP2 work'],
-                  ['Pull Request targets main', pr ? 10 : 0, 10,
+                  ['Pull Request targets main', pr ? 15 : 0, 15,
                     pr ? `PR #${pr.number}: ${expectedBranch} → main` : 'open the required Pull Request'],
                   ['PR changes only allowed files', allowedFiles ? 5 : 0, 5,
                     allowedFiles ? changedNames.join(', ') : (pr ? `changed: ${changedNames.join(', ') || 'none'}` : 'waiting for PR')],
                   ['Submission complete on PR head', submissionComplete ? 10 : 0, 10,
-                    submissionComplete ? 'identity, commands, answers, and reflection complete' : 'complete submission.md on the CP2 branch'],
-                  ['APPROVED review from another user', approvedReview ? 10 : 0, 10,
-                    approvedReview ? `approved by @${approvedReview.user.login}` : 'get an APPROVED review from another GitHub user']
+                    submissionComplete ? 'identity, commands, answers, and reflection complete' : 'complete submission.md on the CP2 branch']
                 ];
                 automatic = checks.reduce((sum, [, earned]) => sum + earned, 0);
                 automaticRows = checks.map(([label, earned, max, detail]) =>
@@ -270,7 +258,7 @@ jobs:
             const total = automatic + teacher;
             const finalLine = manual ? `${total}/100` : 'pending teacher review';
             const status = automatic < 60
-              ? '🟡 **IN PROGRESS — finish the feature-branch, Pull Request, and review workflow in the student repository.**'
+              ? '🟡 **IN PROGRESS — finish the feature-branch and Pull Request workflow in the student repository.**'
               : !manual
                 ? '🔵 **AUTOMATIC CHECKS PASSED — awaiting teacher review.**'
                 : `✅ **FINAL SCORE: ${total}/100**`;
@@ -314,7 +302,7 @@ jobs:
             - ${canonicalRepo ? `[Open student repository](${canonicalRepo})` : 'Student repository unavailable'}
             - ${progressUrl ? `[Open student CP2 progress page](${progressUrl})` : 'Student CP2 progress page not found'}
 
-            > Full automatic credit requires a human APPROVED review from another GitHub user. The grader uses the Pull Request head SHA to verify feature-branch work.
+            > The grader uses the Pull Request head SHA to verify feature-branch work.
 
             ### Teacher grading
 
