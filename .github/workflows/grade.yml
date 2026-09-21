@@ -150,12 +150,26 @@ jobs:
             ).join('\n');
 
             const defaultTeacherBlock = `<!-- klis-cp2-teacher-sync-start -->
-            ### 🧑‍🏫 Teacher review
+            ### 🧑‍🏫 Teacher review — 40 points
 
             **Teacher score:** awaiting review  
             **Final score:** pending teacher review
 
-            Teacher feedback will appear here after grading in the mother repository.
+            #### Teacher grading template
+
+            Use this in the mother-repository CP2 submission Issue:
+
+            ```text
+            /manual-grade
+            Branch safety: 0/10
+            Git workflow explanation: 0/10
+            Pull Request understanding: 0/10
+            Reflection & work quality: 0/10
+
+            Feedback:
+            Write concise feedback here.
+            ```
+
             <!-- klis-cp2-teacher-sync-end -->`;
 
             const status = automatic < 60
