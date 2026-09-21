@@ -41,10 +41,10 @@ jobs:
             ### Your task
 
             - [ ] Clone the repository.
-            - [ ] Create and switch to `${branch}`. Do not implement the checkpoint directly on `main`.
-            - [ ] Update only `feature.txt` and `submission.md`.
-            - [ ] Commit and push `${branch}`.
-            - [ ] Open a Pull Request from `${branch}` → `main`.
+            - [ ] Create and switch to \`${branch}\`. Do not implement the checkpoint directly on \`main\`.
+            - [ ] Update only \`feature.txt\` and \`submission.md\`.
+            - [ ] Commit and push \`${branch}\`.
+            - [ ] Open a Pull Request from \`${branch}\` → \`main\`.
             - [ ] Request review from another GitHub user.
             - [ ] Receive an **APPROVED** review.
 
