@@ -172,7 +172,7 @@ jobs:
               '```',
               '',
               '<!-- klis-cp2-teacher-sync-end -->'
-            ].join('\\n');
+            ].join('\n');
 
             const status = automatic < 60
               ? '🟡 **IN PROGRESS — complete the missing automatic evidence.**'
