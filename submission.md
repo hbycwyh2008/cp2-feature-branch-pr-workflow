@@ -34,14 +34,14 @@ What is the difference between `git add` and `git commit`?
 
 Answer:
 
-## Question 3 — Push, Pull Request, Review
+## Question 3 — Push vs Pull Request
 
-Explain what changes when you push a branch, open a Pull Request, and receive a review.
+What is the difference between pushing a feature branch to GitHub and opening a Pull Request?
 
 Answer:
 
 ## Reflection
 
-Which checkpoint in the branch → PR → review workflow is most useful for preventing mistakes, and why?
+Which step in the branch → push → Pull Request workflow is most useful for preventing mistakes, and why?
 
 Answer:
