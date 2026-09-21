@@ -74,22 +74,23 @@ jobs:
                 : '> Teacher grade published. No written feedback was included.';
 
             const teacherTemplate = teacher === null
-              ? `
-            #### Teacher grading template
-
-            Use this in the mother-repository CP2 submission Issue:
-
-            \\`\\`\\`text
-            /manual-grade
-            Branch safety: 0/10
-            Git workflow explanation: 0/10
-            Pull Request understanding: 0/10
-            Reflection & work quality: 0/10
-
-            Feedback:
-            Write concise feedback here.
-            \\`\\`\\`
-            `
+              ? [
+                  '',
+                  '#### Teacher grading template',
+                  '',
+                  'Use this in the mother-repository CP2 submission Issue:',
+                  '',
+                  '```text',
+                  '/manual-grade',
+                  'Branch safety: 0/10',
+                  'Git workflow explanation: 0/10',
+                  'Pull Request understanding: 0/10',
+                  'Reflection & work quality: 0/10',
+                  '',
+                  'Feedback:',
+                  'Write concise feedback here.',
+                  '```'
+                ].join('\\n')
               : '';
 
             const teacherBlock = `${teacherStart}
