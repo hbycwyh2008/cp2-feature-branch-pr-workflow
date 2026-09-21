@@ -90,7 +90,7 @@ jobs:
                   'Feedback:',
                   'Write concise feedback here.',
                   '```'
-                ].join('\\n')
+                ].join('\n')
               : '';
 
             const teacherBlock = `${teacherStart}
