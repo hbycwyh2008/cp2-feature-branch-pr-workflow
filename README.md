@@ -1,4 +1,4 @@
-# Checkpoint 2 — Feature Branch, Pull Request & Review
+# Checkpoint 2 — Feature Branch & Pull Request
 
 ## Goal
 
@@ -13,10 +13,9 @@ clone
 → git commit
 → git push
 → open Pull Request
-→ review
 ```
 
-CP2 focuses on the feature-branch → Pull Request → review lifecycle. CP3 adds Issues and Project/Kanban tracking.
+CP2 focuses on the feature-branch → Pull Request lifecycle. CP3 adds Issues and Project/Kanban tracking.
 
 ## Start the exercise
 
@@ -30,7 +29,7 @@ After the copy is created:
 2. Open that Issue and note your exact required branch.
 3. Clone the repository locally.
 4. Complete the work on the required CP2 branch.
-5. Open a Pull Request and get it reviewed.
+5. Open a Pull Request from the required CP2 branch to `main`.
 
 You do **not** need to open **Actions** or manually run a workflow.
 
@@ -55,8 +54,6 @@ On your required CP2 branch:
 5. Commit with a meaningful message.
 6. Push the CP2 branch to `origin`.
 7. Open a Pull Request from `cp2-YOUR-GITHUB-USERNAME` → `main`.
-8. Request review from another GitHub user.
-9. Receive at least one submitted **APPROVED** review.
 
 The Pull Request should change only:
 
@@ -75,18 +72,17 @@ The grader reads the Pull Request's stored head SHA, so it checks the work on th
 |---|---:|
 | Correct CP2 branch identity | 10 |
 | `feature.txt` changed on the PR head | 10 |
-| At least one commit belongs to the PR | 5 |
-| Pull Request targets `main` | 10 |
+| At least one commit belongs to the PR | 10 |
+| Pull Request targets `main` | 15 |
 | PR changes only `feature.txt` and `submission.md` | 5 |
 | `submission.md` is complete on the PR head | 10 |
-| Human **APPROVED** review from another GitHub user | 10 |
 | **Automatic total** | **60** |
 
 The original **Exercise Issue** is the student-facing status page. Its score comment updates in place.
 
 ## Submit for teacher grading
 
-Submit after the PR has received an **APPROVED** review:
+Submit after the required Pull Request is open and the automatic checks are complete:
 
 [![Submit CP2](https://img.shields.io/badge/SUBMIT%20CP2-%E2%86%92-0969da?style=for-the-badge&logo=github)](https://github.com/KLIS-CS/GitHub-Feature-Branch-Pull-Request-Workflow/issues/new?template=cp2-submission.yml)
 
@@ -96,14 +92,13 @@ Teacher rubric:
 
 - Branch safety — 10
 - Git workflow explanation — 10
-- Pull Request / review understanding — 10
+- Pull Request understanding — 10
 - Reflection & work quality — 10
 
 ```text
 Student repository
 → feature branch
 → Pull Request
-→ approved review
 → automatic /60
 → Submit CP2
 → mother repository /manual-grade /40
