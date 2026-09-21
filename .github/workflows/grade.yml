@@ -6,8 +6,6 @@ on:
   pull_request_target:
     types: [opened, reopened, synchronize, edited, closed]
     branches: [main]
-  pull_request_review:
-    types: [submitted, edited, dismissed]
 
 permissions:
   contents: read
@@ -28,7 +26,7 @@ jobs:
             const starter = 'STARTER: Replace this line on your CP2 feature branch with a short description of your change.';
 
             let eventPR = null;
-            if (['pull_request_target', 'pull_request_review'].includes(context.eventName)) {
+            if (context.eventName === 'pull_request_target') {
               eventPR = context.payload.pull_request;
             }
 
@@ -129,21 +127,6 @@ jobs:
               commandBlock.length >= 10 &&
               ['Question 1', 'Question 2', 'Question 3', 'Reflection'].every(h => Boolean(answer(h)));
 
-            const reviews = pr
-              ? await github.paginate(github.rest.pulls.listReviews, {
-                  owner, repo, pull_number: pr.number, per_page: 100
-                })
-              : [];
-            const approvals = reviews
-              .filter(r =>
-                r.state === 'APPROVED' &&
-                r.user?.type === 'User' &&
-                r.user?.login?.toLowerCase() !== username.toLowerCase() &&
-                r.submitted_at
-              )
-              .sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at));
-
-            const approvedReview = approvals[0] || null;
             const correctBranch = Boolean(pr?.head?.ref === expectedBranch) || branchExists;
 
             const checks = [
@@ -151,16 +134,14 @@ jobs:
                 correctBranch ? (pr ? `${expectedBranch} via PR #${pr.number}` : expectedBranch) : `expected ${expectedBranch}`],
               ['feature.txt changed on PR head', featureChanged ? 10 : 0, 10,
                 featureChanged ? 'feature change detected' : 'replace the starter line on the CP2 branch'],
-              ['Commit evidence on feature branch', commitCount >= 1 ? 5 : 0, 5,
+              ['Commit evidence on feature branch', commitCount >= 1 ? 10 : 0, 10,
                 commitCount >= 1 ? `${commitCount} commit(s)` : 'commit the CP2 work'],
-              ['Pull Request targets main', pr ? 10 : 0, 10,
+              ['Pull Request targets main', pr ? 15 : 0, 15,
                 pr ? `PR #${pr.number}: ${expectedBranch} → main` : 'open the required Pull Request'],
               ['PR changes only allowed files', allowedFiles ? 5 : 0, 5,
                 allowedFiles ? changedNames.join(', ') : (pr ? `changed: ${changedNames.join(', ') || 'none'}` : 'waiting for PR')],
               ['Submission complete on PR head', submissionComplete ? 10 : 0, 10,
-                submissionComplete ? 'identity, commands, answers, and reflection complete' : 'complete submission.md on the CP2 branch'],
-              ['APPROVED review from another user', approvedReview ? 10 : 0, 10,
-                approvedReview ? `approved by @${approvedReview.user.login} at ${approvedReview.submitted_at}` : 'get an APPROVED review from another GitHub user']
+                submissionComplete ? 'identity, commands, answers, and reflection complete' : 'complete submission.md on the CP2 branch']
             ];
 
             const automatic = checks.reduce((sum, [, earned]) => sum + earned, 0);
@@ -179,7 +160,7 @@ jobs:
 
             const status = automatic < 60
               ? '🟡 **IN PROGRESS — complete the missing automatic evidence.**'
-              : '🔵 **AUTOMATIC CHECKS PASSED — feature branch, Pull Request, and review are complete.**';
+              : '🔵 **AUTOMATIC CHECKS PASSED — feature branch and Pull Request are complete.**';
 
             const progressBody = `${marker}
             ## CP2 — Progress & Score
@@ -194,7 +175,7 @@ jobs:
 
             ${status}
 
-            > The grader reads `feature.txt` and `submission.md` from the Pull Request head SHA, so the feature-branch work is graded instead of `main`.
+            > The grader reads feature.txt and submission.md from the Pull Request head SHA, so the feature-branch work is graded instead of main.
 
             ## Submit for teacher review
 
